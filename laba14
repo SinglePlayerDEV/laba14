@@ -1,0 +1,160 @@
+#include <iostream>
+#include <string>
+#include <list>
+#include <iomanip>
+using namespace std;
+
+class bus
+{
+public:
+	string num;
+	string surname;
+	string inicial;
+	int marsh;
+};
+
+void variant()
+{
+	cout << "1. вывод всех автобусов" << endl;
+	cout << "2. добавление автобуса в начало списка" << endl;
+	cout << "3. добавление автобуса перед определенным автобусом" << endl;
+	cout << "4. сведения об автобусах" << endl;
+	cout << "5. удалить данные автобуса и добавляет в маршурыты" << endl;
+	cout << "6. удаляет из маршрута и добавляет в парк" << endl;
+	cout << "0 - выход" << endl;
+}
+void input(bus& avto)
+{
+	cout << "введите номер автобуса: " << endl;
+	cin >> avto.num;
+	cout << "введите фамили водителя: " << endl;
+	cin >> avto.surname;
+	cout << "введите инициалы водителя: " << endl;
+	cin >> avto.inicial;
+	cout << "введите маршрут автобуса: " << endl;
+	cin >> avto.marsh;
+}
+void press3(list<bus>& list1, bus& object)
+{
+	int v1;
+	cout << "Введите после какого автобуса поставить: " << endl;
+	cin >> v1;
+	input(object);
+	auto firstiter = list1.begin();
+	advance(firstiter, v1 - 1); //билиотечная функция для установление индекса
+	list1.insert(firstiter, object); // Функция добавление по индексу
+}
+void press5(list<bus>& list1, list<bus>& list2)
+{
+	string number;
+	cout << "введите номер автобуса: " << endl;
+	cin >> number;
+	for (auto i = list1.begin(); i != list1.end(); i++)
+	{
+		if (number == i->num)
+		{
+			bus object1;
+			object1.num = i->num;
+			object1.surname = i->surname;
+			object1.inicial = i->inicial;
+			object1.marsh = i->marsh;
+			list2.push_front(object1); //добавление в начало
+			list1.erase(i); //удаление по выбору
+			break;
+		}
+	}
+}
+
+void press6(list<bus>& list1, list<bus>& list2) {
+	string number;
+	cout << "введите номер автобуса: " << endl;
+	cin >> number;
+
+	for (auto i = list2.begin(); i != list2.end(); i++)
+	{
+		if (number == i->num)
+		{
+
+			bus object2;
+			object2.num = i->num;
+			object2.surname = i->surname;
+			object2.inicial = i->inicial;
+			object2.marsh = i->marsh;
+			list1.push_front(object2);
+			list2.erase(i);
+			break;
+		}
+
+	}
+}
+
+
+int main()
+{
+	setlocale(LC_ALL, "ru");
+
+	list<bus>list1;
+	list<bus>list2;
+	bool proverka = true;
+	bus object;
+	do {
+		int v;
+		variant();
+		cout << "сделайте выбор: " << endl;
+		cin >> v;
+
+
+		switch (v) {
+		case 1:
+			for (auto i = list1.begin(); i != list1.end(); i++) {
+				cout << "номер автобуса: " << i->num;
+				cout << "\t фамилия водителя: " << i->surname;
+				cout << "\t инициалы водителя: " << i->inicial;
+				cout << "\t номер маршрута: " << i->marsh << endl;
+			}
+			break;
+		case 2:
+			int size;
+			cout << "введите кол-во автобусов: " << endl;
+			cin >> size;
+			for (int i = 0; i < size; i++) {
+				input(object);
+				list1.push_front(object); // добавление в начало списка
+
+			}
+			break;
+		case 3:
+			press3(list1, object);
+			break;
+
+		case 4:
+			for (auto i = list1.begin(); i != list1.end(); i++) {
+				cout << " номер автобуса: " << i->num;
+				cout << "\t фамилия водителя: " << i->surname;
+				cout << "\t инициалы водителя: " << i->inicial;
+				cout << "\t номер маршрута: " << i->marsh << endl;
+			}
+			cout << "-------------------------------------------------------------------------------------------" << endl;
+			for (auto i = list2.begin(); i != list2.end(); i++) {
+				cout << " номер автобуса: " << i->num;
+				cout << "\t фамилия водителя: " << i->surname;
+				cout << "\t инициалы водителя: " << i->inicial;
+				cout << "\t номер маршрута: " << i->marsh << endl;
+			}
+			break;
+		case 5:
+			press5(list1, list2);
+			break;
+		case 6:
+			press6(list1, list2);
+			break;
+
+		case 0:
+			proverka = false;
+			break;
+		}
+	} while (proverka != false);
+
+
+	return 0;
+}
